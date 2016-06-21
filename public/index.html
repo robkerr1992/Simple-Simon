@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple Simon</title>
+    <style>
+    	body {
+    		background-color: black;
+    	}
+	    #holder {
+			width: 400px;
+			height: 400px;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 5%;
+			
+		}
+		.buttons {
+			width: 200px;
+			height: 200px;
+			float: left;
+			opacity: .6;
+
+		}
+		#b1 {
+			background-color: red;
+			border-top-left-radius: 300px; 
+		}
+		#b2 {
+			background-color: yellow;
+			border-top-right-radius: 300px;
+		}
+		#b3 {
+			background-color: blue;
+			border-bottom-left-radius: 300px;
+		}
+		#b4 {
+			background-color: green;
+			border-bottom-right-radius: 300px;
+		}
+		h1 {
+			text-align: center;
+			color: white;
+		}
+		#buttonHolder, button {
+			margin-left: auto;
+			margin-right: auto;
+			height: 20px;
+			width: 50px;
+			background-color: black;
+			color: white;
+			position: relative;
+			
+
+		}
+
+
+
+
+    </style>
+</head>
+<body>
+	<h1>Simple Simon</h1>
+	<div id="buttonHolder">
+		<button id="start">Start</button>
+	</div>
+	<div id="holder">
+		<div class="buttons" id="b1" data-value="1"></div>
+		<div class="buttons" id="b2" data-value="2"></div>
+		<div class="buttons" id="b3" data-value="3"></div>
+		<div class="buttons" id="b4" data-value="4"></div>
+	</div>
+
+
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript">
+	    var solution = [];
+        var buttons = $('.buttons');
+        var i = 0;
+
+
+        function randomNumber(amount) {
+            var random = Math.floor(Math.random() * (amount) + 1);
+            return random;
+        }
+
+        function colorGenerator(array) {
+            setTimeout(function (){
+                array.forEach(function(element,i){
+                    setTimeout(function(){    
+                        console.log("tis working");
+                        $('#b' + array[i].toString()).animate({
+                            'opacity' : 1
+                        }).animate({
+                        	'opacity' : .6
+                    	})
+                    },1000 * i)
+                });
+            }, 1000);         
+        };
+
+
+
+
+
+       	$('#start').click(function() {
+       		// startSequence();
+        	solution = [];
+        	i = 0;
+        	solution.push(randomNumber(4));
+        	console.log(solution);
+        	colorGenerator(solution);
+    	});
+
+
+
+    	buttons.each(function() {
+        	$(this).click(function() {
+        		$('#b' + $(this).data('value').toString()).animate({
+                            'opacity' : 1
+                        }, 90).animate({
+                        	'opacity' : .6
+                    	}, 250);
+
+
+
+
+                if (solution[i] == $(this).data('value')) {
+                    i ++;
+                    console.log("success.");
+                    if (i == solution.length) {
+                        solution.push(randomNumber(4));
+                        i = 0;
+                        console.log(solution);
+                        colorGenerator(solution);
+                    }
+                } 	else {
+                    i = 0;
+                    solution = [];
+                    console.log("failure.");
+                	};
+            });
+        });
+	</script>
+
+</body>
+</html>
