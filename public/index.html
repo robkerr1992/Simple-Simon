@@ -5,6 +5,7 @@
     <style>
     	body {
     		background-color: black;
+    		padding: none;
     	}
 	    #holder {
 			width: 400px;
@@ -12,6 +13,7 @@
 			margin-left: auto;
 			margin-right: auto;
 			margin-top: 5%;
+			float: center;
 			
 		}
 		.buttons {
@@ -37,31 +39,65 @@
 			background-color: green;
 			border-bottom-right-radius: 300px;
 		}
-		h1 {
+		
+		button, select {
+
+			height: 20px;
+			width: 100px;
+			position: relative;
 			text-align: center;
-			color: white;
+			
 		}
-		#buttonHolder, button {
+			
+		.buttonstyle {
 			margin-left: auto;
 			margin-right: auto;
-			height: 20px;
-			width: 50px;
 			background-color: black;
 			color: white;
-			position: relative;
+			text-align: center;
 			
 
 		}
 
+		#buttonHolder {
+
+			height: 40px;
+			width: 100px;
+		}
+		#messageHolder {
+			width: 100%;
+			height: 100px;
+		}
+		h1 {
+			padding: none;
+			margin-top: none;
+			margin-bottom: none;
+			border: none;
+		}
+		.text-align {
+			text-align: center;
+
+		}
 
 
 
     </style>
 </head>
 <body>
-	<h1>Simple Simon</h1>
-	<div id="buttonHolder">
-		<button id="start">Start</button>
+	<div class="buttonstyle" id="messageHolder">
+		<h1>Simple Simon</h1>
+		
+	</div>
+	<div class="buttonstyle" id="buttonHolder">
+		<select class="buttonstyle hideme" id="difficulty" type="number">
+			<option>Pick a Difficulty</option>
+			<option value="1">Easy</option>
+			<option value=".75">Normal</option>
+			<option value=".5">Tough</option>
+			<option value=".3">Hard</option>
+			<option value=".2">Really Hard</option>
+		</select>
+		<button class="buttonstyle hideme" id="start">Start</button>
 	</div>
 	<div id="holder">
 		<div class="buttons" id="b1" data-value="1"></div>
@@ -77,6 +113,7 @@
 	    var solution = [];
         var buttons = $('.buttons');
         var i = 0;
+        var score = 0;
 
 
         function randomNumber(amount) {
@@ -84,17 +121,19 @@
             return random;
         }
 
-        function colorGenerator(array) {
+
+        //// sequencer to generate solution flashes
+        function sequenceGenerator(array, pace) {
             setTimeout(function (){
                 array.forEach(function(element,i){
                     setTimeout(function(){    
                         console.log("tis working");
                         $('#b' + array[i].toString()).animate({
                             'opacity' : 1
-                        }).animate({
-                        	'opacity' : .6
-                    	})
-                    },1000 * i)
+                        	}, 500 * pace).animate({
+                        		'opacity' : .6
+                    			}, 500 * pace)
+                    },1000 * (i * pace))
                 });
             }, 1000);         
         };
@@ -107,37 +146,75 @@
        		// startSequence();
         	solution = [];
         	i = 0;
+        	score = 0;
         	solution.push(randomNumber(4));
         	console.log(solution);
-        	colorGenerator(solution);
+
+        	$("h1").animate({
+        		"opacity" : 0
+        		}, 500, function(){
+        				$('h1').text("Game will now commence.")
+        				$('.hideme').animate({
+        					opacity: 0
+        					})
+        				}).animate({
+        					"opacity" : 1
+        					}, 500).animate({
+        							"opacity" : 0
+        							},1000, function(){
+        								$('h1').text("Score: 0")	
+        								}).animate({
+        									"opacity" : 1
+        									}, 500, function(){
+        										sequenceGenerator(solution, $('#difficulty').val());
+        										});
+
     	});
+    	
+
+
+
+
+
+
 
 
 
     	buttons.each(function() {
         	$(this).click(function() {
+                
         		$('#b' + $(this).data('value').toString()).animate({
                             'opacity' : 1
                         }, 90).animate({
                         	'opacity' : .6
-                    	}, 250);
+                    	}, 220);
 
 
 
 
                 if (solution[i] == $(this).data('value')) {
                     i ++;
+                    score += (50 / $('#difficulty').val());
+                    $('h1').text("Score: " + score);
                     console.log("success.");
                     if (i == solution.length) {
                         solution.push(randomNumber(4));
                         i = 0;
                         console.log(solution);
-                        colorGenerator(solution);
+                        sequenceGenerator(solution, $('#difficulty').val());
                     }
                 } 	else {
                     i = 0;
                     solution = [];
                     console.log("failure.");
+                    $('h1').text("Final Score: " + score);
+                	$("h1").animate({
+        				"opacity" : 1
+        				}, 500, function(){
+        					$('.buttonstyle').animate({
+        						"opacity" : 1
+        					}, 500)
+        				})
                 	};
             });
         });
