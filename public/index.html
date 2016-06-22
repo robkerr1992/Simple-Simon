@@ -24,19 +24,19 @@
 
 		}
 		#b1 {
-			background-color: red;
+			background-image: url('/img/ramsay200x200.png');
 			border-top-left-radius: 300px; 
 		}
 		#b2 {
-			background-color: yellow;
+			background-image: url('/img/motherofdragons200x200.png');
 			border-top-right-radius: 300px;
 		}
 		#b3 {
-			background-color: blue;
+			background-image: url('/img/jonsnow200x200.png');
 			border-bottom-left-radius: 300px;
 		}
 		#b4 {
-			background-color: green;
+			background-image: url('/img/littlefinger200x200.png');
 			border-bottom-right-radius: 300px;
 		}
 		
@@ -138,18 +138,7 @@
             }, 1000);         
         };
 
-
-
-
-
-       	$('#start').click(function() {
-       		// startSequence();
-        	solution = [];
-        	i = 0;
-        	score = 0;
-        	solution.push(randomNumber(4));
-        	console.log(solution);
-
+        function startSequence() {
         	$("h1").animate({
         		"opacity" : 0
         		}, 500, function(){
@@ -168,18 +157,39 @@
         									}, 500, function(){
         										sequenceGenerator(solution, $('#difficulty').val());
         										});
+        }
+
+
+
+       	$('#start').click(function() {
+        	solution = [];
+        	i = 0;
+        	score = 0;
+        	solution.push(randomNumber(4));
+        	console.log(solution);
+
+       		startSequence();
+        	// $("h1").animate({
+        	// 	"opacity" : 0
+        	// 	}, 500, function(){
+        	// 			$('h1').text("Game will now commence.")
+        	// 			$('.hideme').animate({
+        	// 				opacity: 0
+        	// 				})
+        	// 			}).animate({
+        	// 				"opacity" : 1
+        	// 				}, 500).animate({
+        	// 						"opacity" : 0
+        	// 						},1000, function(){
+        	// 							$('h1').text("Score: 0")	
+        	// 							}).animate({
+        	// 								"opacity" : 1
+        	// 								}, 500, function(){
+        	// 									sequenceGenerator(solution, $('#difficulty').val());
+        	// 									});
 
     	});
     	
-
-
-
-
-
-
-
-
-
     	buttons.each(function() {
         	$(this).click(function() {
                 
@@ -195,7 +205,7 @@
                 if (solution[i] == $(this).data('value')) {
                     i ++;
                     score += (50 / $('#difficulty').val());
-                    $('h1').text("Score: " + score);
+                    $('h1').text("Score: " + parseInt(score));
                     console.log("success.");
                     if (i == solution.length) {
                         solution.push(randomNumber(4));
