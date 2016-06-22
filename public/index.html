@@ -5,6 +5,7 @@
     <style>
     	body {
     		background-image: url('/img/ironthrone2.png');
+    		background-size: 100%;
     		padding: none;
     	}
 	    #holder {
@@ -25,7 +26,7 @@
 
 		}
 		#b1 {
-			background-image: url('/img/ramsay200x200.png');
+			background-image: url('/img/ramsay1.png');
 			border-top-left-radius: 300px; 
 		}
 		#b2 {
@@ -37,7 +38,7 @@
 			border-bottom-left-radius: 300px;
 		}
 		#b4 {
-			background-image: url('/img/littlefinger200x200.png');
+			background-image: url('/img/nightking200x200.png');
 			border-bottom-right-radius: 300px;
 		}
 		
@@ -111,13 +112,17 @@
 	</div>
 
 
-
+	<audio id="mysoundclip" preload="auto">
+    	<source src="/sounds/robotBlipEdit3.mp3"></source>
+	</audio>
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript">
 	    var solution = [];
         var buttons = $('.buttons');
         var i = 0;
         var score = 0;
+		var audio = $("#mysoundclip")[0];
+		var gameOver = [1,3,4,2];
 
 
         function randomNumber(amount) {
@@ -130,13 +135,14 @@
         function sequenceGenerator(array, pace) {
             setTimeout(function (){
                 array.forEach(function(element,i){
-                    setTimeout(function(){    
+                    setTimeout(function(){
+                    	audio.play();    
                         console.log("tis working");
                         $('#b' + array[i].toString()).animate({
                             'opacity' : 1
-                        	}, 500 * pace).animate({
-                        		'opacity' : .6
-                    			}, 500 * pace)
+                        }, 500 * pace).animate({
+                        	'opacity' : .6
+                    		}, 500 * pace)
                     },1000 * (i * pace))
                 });
             }, 1000);         
@@ -145,22 +151,28 @@
         function startSequence() {
         	$("h1").animate({
         		"opacity" : 0
-        		}, 500, function(){
-        				$('h1').text("Winter is coming...")
-        				$('.hideme').animate({
-        					opacity: 0
-        					})
-        				}).animate({
-        					"opacity" : 1
-        					}, 500).animate({
-        							"opacity" : 0
-        							},1000, function(){
-        								$('h1').text("Score: 0")	
-        								}).animate({
-        									"opacity" : 1
-        									}, 500, function(){
-        										sequenceGenerator(solution, $('#difficulty').val());
-        										});
+        	}, 500, function(){
+        			$('h1').text("Winter is coming...")
+        			$('.hideme').animate({
+        				opacity: 0
+        				})
+        			}).animate({
+        				"opacity" : 1
+        				}, 500).animate({
+        						"opacity" : 0
+        						},1000, function(){
+        							$('h1').text("The North Remembers")	
+        							}).animate({
+        								"opacity" : 1
+        								}, 500). animate({
+        									"opacity" : 0
+        									}, 1000, function(){
+        										$('h1').text("Score: 0")
+        										}).animate({
+        											"opacity" : 1
+        											}, 1000, function(){
+        												sequenceGenerator(solution, $('#difficulty').val());
+        												})
         }
 
 
@@ -194,17 +206,17 @@
 
     	});
     	
+
+
+
     	buttons.each(function() {
         	$(this).click(function() {
-                
+            	audio.play();
         		$('#b' + $(this).data('value').toString()).animate({
                             'opacity' : 1
                         }, 90).animate({
                         	'opacity' : .6
-                    	}, 220);
-
-
-
+                    	}, 220);               
 
                 if (solution[i] == $(this).data('value')) {
                     i ++;
@@ -218,10 +230,11 @@
                         sequenceGenerator(solution, $('#difficulty').val());
                     }
                 } 	else {
+                    sequenceGenerator(gameOver, .2);
                     i = 0;
                     solution = [];
                     console.log("failure.");
-                    $('h1').text("Final Score: " + score);
+                    $('h1').text("Final Score: " + parseInt(score));
                 	$("h1").animate({
         				"opacity" : 1
         				}, 500, function(){
