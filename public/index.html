@@ -4,7 +4,7 @@
 	<title>Simple Simon</title>
     <style>
     	body {
-    		background-image: url('/img/ironthrone2.png');
+    		background-image: url('/img/ironthrone3.jpg');
     		background-size: 100%;
     		padding: none;
     	}
@@ -75,6 +75,8 @@
 			margin-top: none;
 			margin-bottom: none;
 			border: none;
+			color: black;
+			text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 		}
 		.text-align {
 			text-align: center;
@@ -122,9 +124,9 @@
         var i = 0;
         var score = 0;
 		var audio = $("#mysoundclip")[0];
-		var gameOver = [1,3,4,2];
+		var gameOver = [1,2,3,4,3,2,1];
 
-
+		//function for randomnumbers to push to solution array
         function randomNumber(amount) {
             var random = Math.floor(Math.random() * (amount) + 1);
             return random;
@@ -147,7 +149,7 @@
                 });
             }, 1000);         
         };
-
+        //Game Start sequence with animations and inital sequence generator
         function startSequence() {
         	$("h1").animate({
         		"opacity" : 0
@@ -174,76 +176,56 @@
         												sequenceGenerator(solution, $('#difficulty').val());
         												})
         }
-
-
-
-       	$('#start').click(function() {
+        //start button listener
+      	$('#start').click(function() {
         	solution = [];
         	i = 0;
         	score = 0;
         	solution.push(randomNumber(4));
         	console.log(solution);
-
        		startSequence();
-        	// $("h1").animate({
-        	// 	"opacity" : 0
-        	// 	}, 500, function(){
-        	// 			$('h1').text("Game will now commence.")
-        	// 			$('.hideme').animate({
-        	// 				opacity: 0
-        	// 				})
-        	// 			}).animate({
-        	// 				"opacity" : 1
-        	// 				}, 500).animate({
-        	// 						"opacity" : 0
-        	// 						},1000, function(){
-        	// 							$('h1').text("Score: 0")	
-        	// 							}).animate({
-        	// 								"opacity" : 1
-        	// 								}, 500, function(){
-        	// 									sequenceGenerator(solution, $('#difficulty').val());
-        	// 									});
-
     	});
-    	
-
-
-
-    	buttons.each(function() {
-        	$(this).click(function() {
+    	///game buttons listener
+    	buttons.click(function() {
+        		//AUDIO LISTENER
             	audio.play();
+            	// BUTTON CLICK FLASH
         		$('#b' + $(this).data('value').toString()).animate({
                             'opacity' : 1
                         }, 90).animate({
                         	'opacity' : .6
                     	}, 220);               
-
-                if (solution[i] == $(this).data('value')) {
+                //GAME FUNCTIONALITY
+                if (solution[i] == $(this).data('value')) { //checks current array index against button clicked
                     i ++;
                     score += (50 / $('#difficulty').val());
                     $('h1').text("Score: " + parseInt(score));
                     console.log("success.");
-                    if (i == solution.length) {
+                    if (i == solution.length) { //checks if player has completed current level
                         solution.push(randomNumber(4));
                         i = 0;
                         console.log(solution);
                         sequenceGenerator(solution, $('#difficulty').val());
                     }
                 } 	else {
-                    sequenceGenerator(gameOver, .2);
-                    i = 0;
-                    solution = [];
-                    console.log("failure.");
-                    $('h1').text("Final Score: " + parseInt(score));
-                	$("h1").animate({
-        				"opacity" : 1
-        				}, 500, function(){
-        					$('.buttonstyle').animate({
-        						"opacity" : 1
-        					}, 500)
-        				})
+	                    sequenceGenerator(gameOver, .1);
+	                    i = 0;
+	                    solution = [];
+	                    console.log("failure.");
+						$('h1').text("Game Over").animate({
+	        				"opacity" : 1
+	        				}, 1000).animate({
+	        						"opacity" : 0
+	        					}, 500, function(){
+	        						$('h1').text("Final Score: " + parseInt(score)).animate({
+	        							'opacity' : 1
+	        						})
+	        						$('.buttonstyle').animate({
+	        							"opacity" : 1
+	        						}, 500)
+	        					})
                 	};
-            });
+            
         });
 	</script>
 
