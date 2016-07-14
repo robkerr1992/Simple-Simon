@@ -92,7 +92,7 @@
 </head>
 <body>
 	<div class="buttonstyle" id="messageHolder">
-		<h1>Simple Simon</h1>
+		<h1>Ser Simon</h1>
 		
 	</div>
 	<div class="buttonstyle" id="buttonHolder">
@@ -154,7 +154,7 @@
         	$("h1").animate({
         		"opacity" : 0
         	}, 500, function(){
-        			$('h1').text("Winter is coming...")
+        			$('h1').text("Winter is Coming...")
         			$('.hideme').animate({
         				opacity: 0
         				})
@@ -178,7 +178,9 @@
         }
         //start button listener
       	$('#start').click(function() {
+      		$('body').css('background-image', 'url("/img/ironthrone3.jpg")');
         	solution = [];
+        	$('#holder').fadeIn();
         	i = 0;
         	score = 0;
         	solution.push(randomNumber(4));
@@ -209,21 +211,45 @@
                     }
                 } 	else {
 	                    sequenceGenerator(gameOver, .1);
+	                    var timer = 1000;
 	                    i = 0;
 	                    solution = [];
 	                    console.log("failure.");
-						$('h1').text("Game Over").animate({
-	        				"opacity" : 1
-	        				}, 1000).animate({
-	        						"opacity" : 0
-	        					}, 500, function(){
-	        						$('h1').text("Final Score: " + parseInt(score)).animate({
-	        							'opacity' : 1
-	        						})
-	        						$('.buttonstyle').animate({
-	        							"opacity" : 1
-	        						}, 500)
-	        					})
+						if (score > 15000){
+							setTimeout(function(){
+
+								$('#holder').fadeOut();
+								$('body').css('background-image', 'url("/img/jonsnowLives.jpg")');
+								$('h1').text("The Night is Dark and Full of Terrors").animate({
+									'opacity': 0
+								}, 2000, function(){
+									$('h1').text('Raise Again, Warrior').animate({
+										'opacity': 1
+									},2000)
+								})
+
+
+							}, 2000)
+							timer = 7000;
+
+						}
+
+						setTimeout(function(){
+							$('h1').text("Game Over").animate({
+		        				"opacity" : 1
+		        				}, 1000).animate({
+		        						"opacity" : 0
+		        					}, 500, function(){
+		        						$('h1').text("Final Score: " + parseInt(score)).animate({
+		        							'opacity' : 1
+		        						})
+		        						$('.buttonstyle').animate({
+		        							"opacity" : 1
+		        						}, 500)
+		        					})
+						}, timer)
+
+	        			
                 	};
             
         });
